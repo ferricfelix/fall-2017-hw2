@@ -99,8 +99,6 @@ You are allowed to use functionality from the standard library for this problem.
 
 Nowadays we take word completion for granted. Our phones, text editors, and word processing programs all give us suggestions for how to complete words as we type based on the letters typed so far. These hints help speed up user input and eliminate common typographical mistakes (but can also be frustrating when the tool insists on completing a word that you don’t want completed).
 
-## Overview
-
 You will implement two functions that such tools might use to provide command completion. The first function, `fill_competions`, will construct a dictionary designed to permit easy calculation of possible word completions. A problem for any such function is what vocabulary, or set of words, to allow completion on. Because the vocabulary you want may depend on the domain a tool is used in, you will provide `fill_competions` with a representative sample of documents from which it will build the completions dictionary. The second function, `find_completions`, will return the set of possible completions for a start of any word in the vocabulary (or the empty set if there are none). In addition to these two functions, you will implement a simple main program to use for testing your functions.
 
 ## Specifications
@@ -108,19 +106,25 @@ You will implement two functions that such tools might use to provide command co
 - `fill_completions(fd)` returns a dictionary. This function takes as input an opened file.
 
   - The keys of the dictionary returned are tuples of the form `(n,l)` for a non-negative integer `n` and a lowercase letter `l`.
-  - The value associated with key `(n, l)` is the set of words in thefile that contain the letter `l` at position `n`. For simplicity, all vocabulary words are converted to lower case. For example, if the file contains the word "Python" and `c_dict` is the returned dictionary, then the sets `c_dict[0,"p"]`, `c_dict[1,"y"]`, `c_dict[2,"t"]`, `c_dict[3,"h"]`, `c_dict[4,"o"]`, and `c_dict[5,"n"]` all contain the word `"Python"`.
+  - The value associated with key `(n, l)` is the set of words in the file that contain the letter `l` at position `n`. For simplicity, all vocabulary words are converted to lower case. For example, if the file contains the word "Python" and `c_dict` is the returned dictionary, then the sets `c_dict[0,"p"]`, `c_dict[1,"y"]`, `c_dict[2,"t"]`, `c_dict[3,"h"]`, `c_dict[4,"o"]`, and `c_dict[5,"n"]` all contain the word `"python"`.
   - Words are stripped of punctuation.
   - "Words" containing non-alphabetic characters are ignored, as are words of length 1 (since there is no reason to complete the latter).
 
-- `find_completions(prefix, c_dict)` returns a set of strings. This function takes a (potential) prefix of a vocabulary word and a completions dictionary of the form described above. It returns the set of vocabulary words in the completions dictionary, if any, that complete the prefix. It the prefix cannot be completed to any vocabulary words, the function returns the empty set.
+- `find_completions(prefix, c_dict)` returns a set of strings. This function takes a prefix of a vocabulary word and a completions dictionary of the form described above. It returns the set of vocabulary words in the completions dictionary, if any, that complete the prefix. It the prefix cannot be completed to any vocabulary words, the function returns an empty set.
 
 - `main()`, the test driver:
 
-  - Opens a file named `ap_docs.txt`. This file contains a collection of old newswire articles. Each article in the collection is separated by a line that contains only the token “<NEW DOCUMENT>”. We don’t care about the distinction between documents for the purpose of building a completions dictionary. So you do not have to do anything special with these lines.
+  - Opens a file named `ap_docs.txt`. This file contains a collection of old newswire articles. Each article in the collection is separated by a line that contains only the token `<NEW DOCUMENT>`. We don’t care about the distinction between articles for the purpose of building a completions dictionary, so you should just ignore the separator lines and continue processing the file.
   - Calls `fill_competions` to fill out a completions dictionary using this file.
   - Repeatedly prompts the user for a prefix to complete.
-  - Prints the set of words that can complete each prefix or that prefix has no completions.
+  - Prints each word from the set of words that can complete the given prefix (one per line). If no completions are posisble, it should just print "No completions".
   - Quit if the user presses Ctrl+D on macOS/Linux or Ctrl+Z on Windows (this will result in `EOFError` being raised).
+
+- To call the `main()` function, put a block at the end of your script with the follow lines (we will discuss this technique more in week 5). This allows your script to run when executed from a command line.
+    ```python
+    if __name__ == '__main__':
+        main()
+    ```
 
 ## Example session
 
@@ -146,5 +150,7 @@ Enter prefix: multi
   multimillionaire
   multicolored
   multibillion
+Enter prefix: multis
+  No completions
 Enter prefix: [Ctrl+D]
 ```
