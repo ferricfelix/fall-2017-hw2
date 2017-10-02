@@ -6,7 +6,7 @@
 
 ## Problem 1
 
-Write a function that draws a N by N game board. The function definition should be:
+Write a function that prints an N by N game board. The function definition should be:
 
 ```python
 def draw_board(n):
